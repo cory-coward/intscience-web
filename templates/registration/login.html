@@ -3,8 +3,13 @@
 {% block title %} | Login{% endblock title %}
 
 {% block content %}
-    <form method="post" action="{% url 'login' %}" class="login_form" novalidate>
+    <form method="post" action="{% url 'login' %}" class="login_form">
         {% csrf_token %}
+
+        <div class="login_form_header">
+            <h2>Integrated Science &amp; Technology</h2>
+            <p>Use the form below to log in to your account.</p>
+        </div>
 
         {% if form.errors %}
             <p class="login_form_error">
@@ -15,7 +20,7 @@
         {% if next %}
             <p class="next_message">
                 {% if user.is_authenticated %}
-                    Your account doesn't have access to this page. To proceed, please login with an account that
+                    Your account doesn't have access to this page. To proceed, please log in with an account that
                     has access.
                 {% else %}
                     Please login to see this page.
