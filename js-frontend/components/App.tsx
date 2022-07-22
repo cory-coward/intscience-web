@@ -1,7 +1,13 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Home";
+import About from "./About";
 
 export default function App() {
     return (
-        <h2 className="text-5xl text-green-600">This is a React app!</h2>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+        </Routes>
     )
 }
