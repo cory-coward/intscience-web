@@ -3,5 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+    #root {
+        display: flex;
+        flex-direction: column;
+        min-height: 94vh;
+    }
 
+    .navlink {
+        @apply px-1 py-2 h-full inline-flex items-center text-sm text-gray-500 border-b-[3px] border-transparent
+            hover:border-gray-300 hover:text-gray-300 transition duration-150;
+    }
+
+    .active-navlink {
+        @apply px-1 py-2 h-full inline-flex items-center text-sm text-gray-200 border-b-[3px] border-gray-200;
+    }
 }
