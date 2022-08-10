@@ -73,6 +73,15 @@ body {
     transition: all ease-in-out 150ms;
 }
 
+.login_form input[type="submit"]:disabled {
+    background-color: #818cf8;
+    cursor: not-allowed;
+}
+
+.login_form input[type="submit"]:disabled:hover {
+    background-color: #818cf8;
+}
+
 .login_form input[type="submit"]:hover {
     background-color: #4338ca;
 }

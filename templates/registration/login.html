@@ -3,7 +3,7 @@
 {% block title %} | Login{% endblock title %}
 
 {% block content %}
-    <form method="post" action="{% url 'login' %}" class="login_form">
+    <form method="post" action="{% url 'login' %}" id="login_form" class="login_form">
         {% csrf_token %}
 
         <div class="login_form_header">
@@ -36,7 +36,18 @@
             <label for="{{ form.password.id_for_label }}">Password</label>
             {{ form.password }}
         </div>
-        <input type="submit" value="Login">
+        <input type="submit" id="login_submit_button" value="Login">
         <input type="hidden" name="next" value="{{ next }}">
     </form>
+
+    <script>
+        const loginForm = document.getElementById("login_form");
+        const loginButton = document.getElementById("login_submit_button");
+
+        loginForm.addEventListener("submit", () => {
+            loginButton.disabled = true;
+            loginButton.classList.add("disabled_button");
+            loginButton.value = "Please wait...";
+        });
+    </script>
 {% endblock content %}
