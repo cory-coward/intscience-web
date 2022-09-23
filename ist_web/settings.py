@@ -17,6 +17,7 @@ DEBUG = env('DEBUG')
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    # Core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,11 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party
+    'rest_framework',
 
     # Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
+    # 'plc_alarms.apps.PlcAlarmsConfig',
     'dashboard.apps.DashboardConfig',
+    'plc_config.apps.PlcConfigConfig',
+    'maintenance_logs.apps.MaintenanceLogsConfig',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +102,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ],
+}
+
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
 STATICFILES_DIRS = [
@@ -107,3 +118,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+PLC_IP = env('PLC_IP')
