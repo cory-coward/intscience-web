@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="main_container">
+        <h3>Gardner Denver Log Details</h3>
+        <hr />
+        <div class="log_details">
+            <p><span class="font-bold">Log created by:</span> {{ gardnerdenverlog.author.first_name }} {{ gardnerdenverlog.author.last_name }}</p>
+            <p><span class="font-bold">Log timestamp:</span> {{ gardnerdenverlog.created_on }}</p>
+            <div>
+                <p class="font-bold">Log contents:</p>
+                <p>{{ gardnerdenverlog.log_text }}</p>
+            </div>
+        </div>
+        <a href="{% url 'maintenance_logs:gardner-denver-logs' %}" class="button">Back to Gardner Denver logs</a>
+    </main>
+{% endblock content %}

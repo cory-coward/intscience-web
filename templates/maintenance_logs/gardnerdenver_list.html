@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="main_container">
+        <section class="logs_list_container">
+            <div class="logs_list_container__header">
+                <h3>Gardner Denver Log Entries</h3>
+                <a href="{% url 'maintenance_logs:create-gardner-denver-log' %}" class="button">Add new entry</a>
+            </div>
+            {% if gardnerdenverlog_list|length == 0 %}
+                <p>There are currently no Gardner Denver log entries.</p>
+            {% else %}
+                <p>Click on an entry to view full details.</p>
+                <table class="logs_table">
+                    <thead>
+                        <tr>
+                            <th>Recorded By</th>
+                            <th>Log Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in gardnerdenverlog_list %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'maintenance_logs:gardner-denver-log-detail' log.pk %}">
+                                        {{ log.author.first_name }} {{ log.author.last_name }}
+                                    </a></td>
+                                <td>{{ log.created_on }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if page_obj.paginator.num_pages > 1 %}
+                    <div class="table_pagination">
+                        <span class="page_links">
+                            {% if page_obj.has_previous %}
+                                {% if page_obj.number > 1 %}
+                                    <a href="?page=1">First</a>
+                                {% endif %}
+                                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            {% endif %}
+
+                            <span class="current_page">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                                {% if page_obj.number < page_obj.paginator.num_pages %}
+                                    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                {% endif %}
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </section>
+    </main>
+{% endblock content %}

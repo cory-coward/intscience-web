@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="main_container">
+        <h3>Maintenance Log Details</h3>
+        <hr />
+        <div class="log_details">
+            <p><span class="font-bold">Log created by:</span> {{ maintenancelog.author.first_name }} {{ maintenancelog.author.last_name }}</p>
+            <p><span class="font-bold">Log timestamp:</span> {{ maintenancelog.created_on }}</p>
+            <div>
+                <p class="font-bold">Log contents:</p>
+                <p>{{ maintenancelog.log_text }}</p>
+            </div>
+        </div>
+        <a href="{% url 'maintenance_logs:maintenance-logs' %}" class="button">Back to maintenance logs</a>
+    </main>
+{% endblock content %}

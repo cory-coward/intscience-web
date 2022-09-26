@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <main class="main_container">
+        <section class="form_container">
+            <h3>New Maintenance Log Entry</h3>
+            <form method="post" class="logs_form">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {% for error in field.errors %}
+                        <p class="form_error">{{ error }}</p>
+                    {% endfor %}
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <p class="form_help_text">{{ field.help_text }}</p>
+                {% endfor %}
+                <input type="submit" class="button" value="Submit" />
+            </form>
+        </section>
+    </main>
+{% endblock content %}
