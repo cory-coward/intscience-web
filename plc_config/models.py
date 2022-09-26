@@ -14,6 +14,8 @@ class WellConfig(models.Model):
                                                  validators=[MinValueValidator(10), MaxValueValidator(360)])
 
     class Meta:
+        verbose_name = 'Well Configuration'
+        verbose_name_plural = 'Well Configuration Entries'
         constraints = [
             models.CheckConstraint(
                 name='plc_config_WellConfig_record_minutes_range',

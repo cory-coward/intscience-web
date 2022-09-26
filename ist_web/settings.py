@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     # Local
     'accounts.apps.AccountsConfig',
     'pages.apps.PagesConfig',
-    # 'plc_alarms.apps.PlcAlarmsConfig',
+    'plc_alarms.apps.PlcAlarmsConfig',
+    'plc_logs.apps.PlcLogsConfig',
     'dashboard.apps.DashboardConfig',
     'plc_config.apps.PlcConfigConfig',
     'maintenance_logs.apps.MaintenanceLogsConfig',
@@ -96,7 +97,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 

@@ -10,6 +10,10 @@ class MaintenanceLog(models.Model):
     modified_on = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        verbose_name = 'Maintenance Log'
+        verbose_name_plural = 'Maintenance Logs'
+
     def __str__(self):
         return f'{self.author} {self.created_on}'
 
@@ -22,6 +26,10 @@ class GardnerDenverLog(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = 'Gardner Denver Log'
+        verbose_name_plural = 'Gardner Denver Logs'
 
     def __str__(self):
         return f'{self.author} {self.created_on}'
