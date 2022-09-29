@@ -121,3 +121,4 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 PLC_IP = env('PLC_IP')
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')

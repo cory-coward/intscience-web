@@ -2,12 +2,12 @@ from pylogix import PLC
 from pylogix.eip import Response
 from typing import List, Union
 
+PlcResponse = Union[List[Response], Response]
+
 
 class PlcCore:
     def __init__(self, ip_address: str):
         self.ip_address = ip_address
-
-    PlcResponse = Union[List[Response], Response]
 
     def read_tag(self, tag_name: str, num_elements: Union[int, None]) -> PlcResponse:
         with PLC(self.ip_address) as comm:

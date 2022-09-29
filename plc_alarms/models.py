@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 
 
 class PLCAlarm(models.Model):
@@ -13,6 +12,9 @@ class PLCAlarm(models.Model):
     class Meta:
         verbose_name = 'PLC Alarm'
         verbose_name_plural = 'PLC Alarms'
+        constraints = [
+            models.UniqueConstraint(fields=['tag_name', 'timestamp', ], name='unique_tag_name_timestamp'),
+        ]
 
     def __str__(self):
         return f'{self.tag_name} {self.timestamp}'
