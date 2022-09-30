@@ -14,7 +14,10 @@ SECRET_KEY = env('SECRET_KEY')
 
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+if DEBUG is True:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.225', ]
 
 INSTALLED_APPS = [
     # Core
