@@ -126,3 +126,22 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 PLC_IP = env('PLC_IP')
 GMAIL_USER = env('GMAIL_USER')
 GMAIL_PASSWORD = env('GMAIL_PASSWORD')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/debug-log.log'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
