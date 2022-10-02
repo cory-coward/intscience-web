@@ -1,7 +1,11 @@
 import pytz
+import time
+
 from datetime import datetime
 from typing import List
+
 from django.conf import settings
+from django.core.cache import cache
 
 from plc_config.models import GeneralConfig, WellConfig
 from plc_logs.models import WellLogEntry
@@ -10,12 +14,8 @@ from .plc_alarms import PlcAlarms
 from .plc_core import PlcCore, PlcResponse
 from .plc_item import PLCItem
 
-import time
-
 
 class PlcMeasurements:
-    record_counter: int = 0
-
     @staticmethod
     def read_wells() -> List[PLCItem]:
         start = time.time()
@@ -26,6 +26,14 @@ class PlcMeasurements:
 
         # Load in wells from db
         wells = WellConfig.objects.all()
+
+        # Load in well_readings_count from cache
+        count_from_cache = cache.get('well_readings_count')
+        if count_from_cache is None:
+            cache.set('well_readings_count', 1, None)
+            well_readings_count = 1
+        else:
+            well_readings_count = count_from_cache
 
         # Create empty list of plc items
         plc_items: List[PLCItem] = []
@@ -86,7 +94,7 @@ class PlcMeasurements:
         PlcAlarms.process_alarms(plc_items)
 
         # Check if we need to add well measurements to db
-        if PlcMeasurements.record_counter * 10 == well_record_time * 60:
+        if well_readings_count * 10 == well_record_time * 60:
             # Save to db and reset record_counter
             well_db_objects: List[WellLogEntry] = []
 
@@ -99,10 +107,23 @@ class PlcMeasurements:
                 well_db_objects.append(log_entry)
 
             WellLogEntry.objects.bulk_create(well_db_objects)
-            PlcMeasurements.record_counter = 1
+            cache.set('well_readings_count', 1, None)
         else:
             # Increment record_counter
-            PlcMeasurements.record_counter += 1
+            cache.set('well_readings_count', well_readings_count + 1, None)
+
+        # Save well readings to cache
+        well_cache_objects = []
+        for item in plc_items:
+            wc = {
+                'well_name': item.source_tag,
+                'gal_per_minute': item.flow_rate,
+                'total_gal': item.flow_total,
+                'timestamp': datetime.now(ctz)
+            }
+            well_cache_objects.append(wc)
+
+        cache.set('current_well_readings', well_cache_objects, None)
 
         end = time.time()
         print(f'Time elapsed: {(end-start) * 10**3}ms')
