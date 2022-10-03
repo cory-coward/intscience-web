@@ -17,7 +17,7 @@ from .plc_item import PLCItem
 
 class PlcMeasurements:
     @staticmethod
-    def read_wells() -> List[PLCItem]:
+    def read_wells():
         start = time.time()
 
         # Load in time between data records
@@ -128,4 +128,4 @@ class PlcMeasurements:
         end = time.time()
         print(f'Time elapsed: {(end-start) * 10**3}ms')
 
-        return plc_items
+        # return plc_items

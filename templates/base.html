@@ -19,7 +19,7 @@
         <h3 class="site_logo">Integrated Science &amp; Technology</h3>
         <div class="main_nav__links">
             <a
-                href="#"
+                href="{% url 'dashboard:dashboard-home' %}"
                 class="{% if request.path == dashboard_home %}main_nav__active_navlink{% else %}main_nav__navlink{% endif %}"
             >
                 Measurements &amp; Alarms
