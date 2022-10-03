@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -5,14 +6,13 @@ from django.views.decorators.csrf import csrf_exempt
 from .serializers import WellLogEntrySerializer
 
 from datetime import datetime
-from typing import List
 import pytz
 
 
 @csrf_exempt
 def current_well_logs(request):
     if request.method == 'GET':
-        # cached_well_readings = cache.get('current_well_readings')
+        # cached_well_readings = cache.get(settings.CACHE_KEY_CURRENT_WELL_READINGS)
         #
         # if cached_well_readings is None:
         #     return JsonResponse({})

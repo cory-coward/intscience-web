@@ -28,9 +28,9 @@ class PlcMeasurements:
         wells = WellConfig.objects.all()
 
         # Load in well_readings_count from cache
-        count_from_cache = cache.get('well_readings_count')
+        count_from_cache = cache.get(settings.CACHE_KEY_WELL_READINGS_COUNT)
         if count_from_cache is None:
-            cache.set('well_readings_count', 1, None)
+            cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
             well_readings_count = 1
         else:
             well_readings_count = count_from_cache
@@ -107,10 +107,10 @@ class PlcMeasurements:
                 well_db_objects.append(log_entry)
 
             WellLogEntry.objects.bulk_create(well_db_objects)
-            cache.set('well_readings_count', 1, None)
+            cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
         else:
             # Increment record_counter
-            cache.set('well_readings_count', well_readings_count + 1, None)
+            cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, well_readings_count + 1, None)
 
         # Save well readings to cache
         well_cache_objects = []
@@ -123,7 +123,7 @@ class PlcMeasurements:
             }
             well_cache_objects.append(wc)
 
-        cache.set('current_well_readings', well_cache_objects, None)
+        cache.set(settings.CACHE_KEY_CURRENT_WELL_READINGS, well_cache_objects, None)
 
         end = time.time()
         print(f'Time elapsed: {(end-start) * 10**3}ms')
