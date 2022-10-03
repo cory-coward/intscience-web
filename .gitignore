@@ -248,6 +248,9 @@ web_modules/
 # parcel-bundler cache (https://parceljs.org/)
 .parcel-cache
 
+# React build output
+staticfiles/js/js-bundle.js
+
 # Next.js build output
 .next
 out
