@@ -135,6 +135,7 @@ GMAIL_USER = env('GMAIL_USER')
 GMAIL_PASSWORD = env('GMAIL_PASSWORD')
 
 CACHE_KEY_WELL_READINGS_COUNT = 'well_readings_count'
+CACHE_KEY_WELL_ALARMS_COUNT = 'well_alarms_count'
 CACHE_KEY_CURRENT_WELL_READINGS = 'current_well_readings'
 
 # LOGGING = {
