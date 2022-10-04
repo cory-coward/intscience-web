@@ -94,24 +94,24 @@ class PlcMeasurements:
         PlcAlarms.process_alarms(plc_items)
 
         # Check if we need to add well measurements to db
-        if well_readings_count * 10 == well_record_time * 60:
-            # Save to db and reset record_counter
-            well_db_objects: List[WellLogEntry] = []
+        # if well_readings_count * 10 == well_record_time * 60:
+        # Save to db and reset record_counter
+        well_db_objects: List[WellLogEntry] = []
 
-            for item in plc_items:
-                log_entry = WellLogEntry()
-                log_entry.well_name = item.source_tag
-                log_entry.gal_per_minute = item.flow_rate
-                log_entry.total_gal = item.flow_total
-                log_entry.is_running = item.is_running
+        for item in plc_items:
+            log_entry = WellLogEntry()
+            log_entry.well_name = item.source_tag
+            log_entry.gal_per_minute = item.flow_rate
+            log_entry.total_gal = item.flow_total
+            log_entry.is_running = item.is_running
 
-                well_db_objects.append(log_entry)
+            well_db_objects.append(log_entry)
 
-            WellLogEntry.objects.bulk_create(well_db_objects)
-            cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
-        else:
-            # Increment record_counter
-            cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, well_readings_count + 1, None)
+        WellLogEntry.objects.bulk_create(well_db_objects)
+        cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
+        # else:
+        #     # Increment record_counter
+        #     cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, well_readings_count + 1, None)
 
         # Save well readings to cache
         well_cache_objects = []
