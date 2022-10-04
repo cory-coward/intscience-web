@@ -1,13 +1,5 @@
 from rest_framework import serializers
 
-from .models import WellLogEntry
-
-
-# class WellLogEntrySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = WellLogEntry
-#         fields = ['id', 'well_name', 'gal_per_minute', 'total_gal', 'timestamp']
-
 
 class WellLogEntrySerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)

@@ -15,9 +15,9 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 if DEBUG is True:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
-else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.2.225', ]
+else:
+    ALLOWED_HOSTS = ['ist-grenada.com', 'www.ist-grenada.com', '69.92.132.138', ]
 
 INSTALLED_APPS = [
     # Core
@@ -128,7 +128,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/dashboard/current-well-readings/'
 
 PLC_IP = env('PLC_IP')
 GMAIL_USER = env('GMAIL_USER')
