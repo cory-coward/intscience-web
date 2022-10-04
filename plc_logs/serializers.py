@@ -14,6 +14,7 @@ class WellLogEntrySerializer(serializers.Serializer):
     well_name = serializers.CharField(max_length=25)
     gal_per_minute = serializers.FloatField(default=0)
     total_gal = serializers.FloatField(default=0)
+    is_running = serializers.BooleanField(default=False)
     timestamp = serializers.DateTimeField()
 
     # We won't need to save through the API so these functions aren't needed

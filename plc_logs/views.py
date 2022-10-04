@@ -18,12 +18,13 @@ def current_well_logs(request):
         #     return JsonResponse({})
 
         cached_well_readings = []
-        for i in range(10):
+        for i in range(15):
             wc = {
                 'id': i,
                 'well_name': f'DRW-{i}',
                 'gal_per_minute': i * 10,
                 'total_gal': i * 25,
+                'is_running': True if i % 2 == 0 else False,
                 'timestamp': datetime.now(pytz.timezone('America/Chicago'))
             }
             cached_well_readings.append(wc)

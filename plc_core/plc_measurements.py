@@ -103,6 +103,7 @@ class PlcMeasurements:
                 log_entry.well_name = item.source_tag
                 log_entry.gal_per_minute = item.flow_rate
                 log_entry.total_gal = item.flow_total
+                log_entry.is_running = item.is_running
 
                 well_db_objects.append(log_entry)
 
@@ -119,6 +120,7 @@ class PlcMeasurements:
                 'well_name': item.source_tag,
                 'gal_per_minute': item.flow_rate,
                 'total_gal': item.flow_total,
+                'is_running': item.is_running,
                 'timestamp': datetime.now(ctz)
             }
             well_cache_objects.append(wc)

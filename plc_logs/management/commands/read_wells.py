@@ -16,7 +16,7 @@ class Command(BaseCommand):
         try:
             ctz = pytz.timezone('America/Chicago')
 
-            # PlcMeasurements.read_wells()
+            PlcMeasurements.read_wells()
 
             self.stdout.write(f'Wells successfully read at {datetime.now(ctz)}')
         except Exception as e:

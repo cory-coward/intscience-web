@@ -5,6 +5,7 @@ class WellLogEntry(models.Model):
     well_name = models.CharField(max_length=25)
     gal_per_minute = models.FloatField(default=0)
     total_gal = models.FloatField(default=0)
+    is_running = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
