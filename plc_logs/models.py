@@ -3,9 +3,9 @@ from django.db import models
 
 class WellLogEntry(models.Model):
     well_name = models.CharField(max_length=25)
-    gal_per_minute = models.FloatField(default=0)
-    total_gal = models.FloatField(default=0)
-    is_running = models.BooleanField(default=False)
+    gal_per_minute = models.FloatField(default=0, null=True, blank=True)
+    total_gal = models.FloatField(default=0, null=True, blank=True)
+    is_running = models.BooleanField(default=False, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

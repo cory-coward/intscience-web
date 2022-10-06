@@ -5,3 +5,6 @@ class PlcConfigConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'plc_config'
     verbose_name = 'PLC Configuration'
+
+    def ready(self):
+        import plc_config.signals

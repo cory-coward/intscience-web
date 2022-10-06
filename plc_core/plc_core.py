@@ -25,4 +25,4 @@ class PlcCore:
     def write_tag(self, tag_name: str, val: any) -> PlcResponse:
         with PLC(self.ip_address) as comm:
             response = comm.Write(tag_name, val)
-            return response.Status
+            return response

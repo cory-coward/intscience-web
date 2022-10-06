@@ -25,9 +25,9 @@ class GeneralConfig(models.Model):
 class WellConfig(models.Model):
     well_name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
-    tag_prefix = models.CharField(max_length=50, help_text='')
-    cycle_gallons = models.PositiveIntegerField(help_text='Gallons per cycle')
-    sleep_minutes = models.PositiveIntegerField(help_text='Minutes to sleep before restarting cycle')
+    tag_prefix = models.CharField(max_length=50, help_text='The tag name as it appears in the PLC')
+    cycle_gallons = models.FloatField(default=0, help_text='Gallons per cycle')
+    sleep_minutes = models.FloatField(default=0, help_text='Minutes to sleep before restarting cycle')
 
     class Meta:
         verbose_name = 'Well Configuration'

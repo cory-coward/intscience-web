@@ -7,7 +7,7 @@ from .forms import MaintenanceLogForm, GardnerDenverLogForm
 from .models import MaintenanceLog, GardnerDenverLog
 
 from django.shortcuts import render
-from plc_core.plc_measurements import PlcMeasurements
+from plc_core.plc_well_ops import PlcMeasurements
 
 
 class MaintenanceLogListView(LoginRequiredMixin, ListView):
