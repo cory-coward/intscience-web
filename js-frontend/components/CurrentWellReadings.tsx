@@ -33,6 +33,7 @@ export default function Home() {
         axios.get<IWellLogEntry[]>("/api/v1/well-logs/current-well-logs")
             .then(res => {
                 setWellLogEntries(res.data);
+                console.log(res.data);
                 setIsLoading(false);
             })
             .catch(error => {
@@ -136,7 +137,7 @@ export default function Home() {
                                     <tbody className="bg-white">
                                     {wellLogEntries.map((entry, entryId) => (
                                         <tr
-                                            key={entry.id}
+                                            key={entry.well_name}
                                             className={entryId % 2 === 0 ? undefined : "bg-gray-50"}
                                         >
                                             <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
