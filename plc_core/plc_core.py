@@ -1,6 +1,6 @@
 from pylogix import PLC
 from pylogix.eip import Response
-from typing import List, Union
+from typing import List, Tuple, Union
 
 PlcResponse = Union[List[Response], Response]
 
@@ -25,4 +25,9 @@ class PlcCore:
     def write_tag(self, tag_name: str, val: any) -> PlcResponse:
         with PLC(self.ip_address) as comm:
             response = comm.Write(tag_name, val)
+            return response
+
+    def write_tag_list(self, data: List[Tuple[str, any]]) -> PlcResponse:
+        with PLC(self.ip_address) as comm:
+            response = comm.Write(data)
             return response
