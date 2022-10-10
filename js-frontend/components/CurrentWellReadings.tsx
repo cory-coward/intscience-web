@@ -11,13 +11,14 @@ interface IWellLogEntry {
     well_name: string;
     gal_per_minute: number;
     total_gal: number;
+    pump_mode: string;
     is_running: boolean;
     timestamp: Date;
 }
 
-enum MachineOperation {
-    Start = "START",
-    Stop = "STOP",
+enum PumpMode {
+    Auto = "Auto",
+    Manual = "Manual",
 }
 
 export default function Home() {
@@ -33,7 +34,7 @@ export default function Home() {
         axios.get<IWellLogEntry[]>("/api/v1/well-logs/current-well-logs")
             .then(res => {
                 setWellLogEntries(res.data);
-                console.log(res.data);
+                // console.log(res.data);
                 setIsLoading(false);
             })
             .catch(error => {
@@ -53,7 +54,7 @@ export default function Home() {
         })();
     }, []);
 
-    const handleMachineOperation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, wellName: string, newMachineState: MachineOperation) => {
+    const handleMachineOperation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, wellName: string, newPumpMode: PumpMode) => {
         setIsLoading(true);
         e.preventDefault();
         const target = e.currentTarget as HTMLInputElement;
@@ -63,30 +64,30 @@ export default function Home() {
         target.classList.add(...disabledButton.split(" "));
         target.innerHTML = "Please wait...";
 
-        console.log(`${wellName}: ${newMachineState.toString()}`);
+        // console.log(`${wellName}: ${newPumpMode.toString()}`);
 
-        axios.post("/api/v1/well-logs/set-well-state/", {
-            well_name: "Hello",
-            new_state: "World",
+        axios.post("/api/v1/well-logs/set-pump-mode/", {
+            well_name: wellName,
+            new_mode: newPumpMode,
         }, {
             headers: {
                 "X-CSRFToken": getCookie("csrftoken")
             }
         })
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 loadData();
                 target.disabled = false;
                 target.classList.remove(...disabledButton.split(" "));
 
-                switch (newMachineState) {
-                    case MachineOperation.Start:
+                switch (newPumpMode) {
+                    case PumpMode.Auto:
                         target.classList.add(...buttonStop.split(" "));
-                        target.innerHTML = `${<XMarkIcon className="w-5 h-5" />}Stop`;
+                        target.innerHTML = `${<XMarkIcon className="w-5 h-5" />}Set to Manual`;
                         break;
-                    case MachineOperation.Stop:
+                    case PumpMode.Manual:
                         target.classList.add(...buttonStart.split(" "));
-                        target.innerHTML = `${<ArrowPathIcon className="w-5 h-5" />}Start`;
+                        target.innerHTML = `${<ArrowPathIcon className="w-5 h-5" />}Set to Auto`;
                         break;
                     default:
                         break;
@@ -130,6 +131,9 @@ export default function Home() {
                                                 Status
                                             </th>
                                             <th scope="col" className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
+                                                Pump Mode
+                                            </th>
+                                            <th scope="col" className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">
                                                 Actions
                                             </th>
                                         </tr>
@@ -155,20 +159,23 @@ export default function Home() {
                                             <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
                                                 <RunningStatusIndicator isRunning={entry.is_running} />
                                             </td>
+                                            <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
+                                                {entry.pump_mode}
+                                            </td>
                                             <td className="whitespace-nowrap px-3 py-1.5 text-sm text-gray-500">
-                                                {entry.is_running ? (
+                                                {entry.pump_mode === PumpMode.Auto ? (
                                                     <button
-                                                        onClick={(e) => handleMachineOperation(e, entry.well_name, MachineOperation.Stop)}
-                                                        className={`${buttonBase} ${entry.is_running ? buttonStop : buttonStart}`}
+                                                        onClick={(e) => handleMachineOperation(e, entry.well_name, PumpMode.Manual)}
+                                                        className={`${buttonBase} ${buttonStop}`}
                                                     >
-                                                        <XMarkIcon className="w-5 h-5" />Stop
+                                                        <XMarkIcon className="w-5 h-5" />Set to Manual
                                                     </button>
                                                 ) : (
                                                     <button
-                                                        onClick={(e) => handleMachineOperation(e, entry.well_name, MachineOperation.Start)}
-                                                        className={`${buttonBase} ${entry.is_running ? buttonStop : buttonStart}`}
+                                                        onClick={(e) => handleMachineOperation(e, entry.well_name, PumpMode.Auto)}
+                                                        className={`${buttonBase} ${buttonStart}`}
                                                     >
-                                                        <ArrowPathIcon className="w-5 h-5" />Start
+                                                        <ArrowPathIcon className="w-5 h-5" />Set to Auto
                                                     </button>
                                                 )}
                                             </td>

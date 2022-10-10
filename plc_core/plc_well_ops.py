@@ -45,6 +45,7 @@ class PlcMeasurements:
         ctz = pytz.timezone('America/Chicago')
 
         for well in wells:
+            tags_to_read.append(f'{well.tag_prefix}.AutoMode')
             tags_to_read.append(f'{well.tag_prefix}.Running')
             tags_to_read.append(f'{well.tag_prefix}.FlowRate')
             tags_to_read.append(f'{well.tag_prefix}.FlowTotal')
@@ -69,6 +70,8 @@ class PlcMeasurements:
 
             item = PLCItem()
             item.source_tag = well.tag_prefix
+            item.pump_mode = 'Auto' if [x for x in related_tags if x.TagName.endswith('AutoMode')][0].Value is True \
+                else 'Manual'
             item.is_running = [x for x in related_tags if x.TagName.endswith('Running')][0].Value
             item.flow_rate = [x for x in related_tags if x.TagName.endswith('FlowRate')][0].Value
             item.flow_total = [x for x in related_tags if x.TagName.endswith('FlowTotal')][0].Value
@@ -94,8 +97,11 @@ class PlcMeasurements:
         PlcAlarms.process_alarms(plc_items)
 
         # Check if we need to add well measurements to db
+        print(f'Well readings count: {well_readings_count}')
+        print(f'Well record time: {well_record_time}')
         if ignore_period is True or (well_readings_count * 10 == well_record_time * 60):
             # Save to db and reset record_counter
+            print('Saving to db')
             well_db_objects: List[WellLogEntry] = []
 
             for item in plc_items:
@@ -103,6 +109,7 @@ class PlcMeasurements:
                 log_entry.well_name = item.source_tag
                 log_entry.gal_per_minute = item.flow_rate
                 log_entry.total_gal = item.flow_total
+                log_entry.pump_mode = WellLogEntry.AUTO if item.pump_mode is True else WellLogEntry.MANUAL
                 log_entry.is_running = item.is_running
 
                 well_db_objects.append(log_entry)
@@ -120,6 +127,7 @@ class PlcMeasurements:
                 'well_name': item.source_tag,
                 'gal_per_minute': item.flow_rate,
                 'total_gal': item.flow_total,
+                'pump_mode': item.pump_mode,
                 'is_running': item.is_running,
                 'timestamp': datetime.now(ctz)
             }
@@ -131,3 +139,14 @@ class PlcMeasurements:
         print(f'Time elapsed: {(end-start) * 10**3}ms')
 
         # return plc_items
+
+    @staticmethod
+    def set_well_mode(well_name: str, new_mode: str) -> bool:
+        tag_name = f'{well_name}.AutoMode'
+
+        new_mode = True if new_mode == 'Auto' else False
+
+        plc = PlcCore(ip_address=settings.PLC_IP)
+        plc_response = plc.write_tag(tag_name, new_mode)
+
+        return plc_response.Status == 'Success'

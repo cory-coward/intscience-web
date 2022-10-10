@@ -7,10 +7,10 @@ from .models import WellLogEntry
 
 
 class WellLogEntryAdmin(admin.ModelAdmin):
-    list_display = ('well_name', 'gal_per_minute', 'total_gal', 'is_running', 'timestamp', )
+    list_display = ('well_name', 'gal_per_minute', 'total_gal', 'pump_mode', 'is_running', 'timestamp', )
     list_filter = (('timestamp', DateRangeFilter), 'well_name', )
     list_per_page = 25
-    readonly_fields = ('well_name', 'gal_per_minute', 'total_gal', 'is_running', 'timestamp', )
+    readonly_fields = ('well_name', 'gal_per_minute', 'total_gal', 'pump_mode', 'is_running', 'timestamp', )
 
     def get_rangefilter_timestamp_default(self, request):
         return datetime.today, datetime.today
