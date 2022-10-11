@@ -1,12 +1,14 @@
 from django.conf import settings
+from django.contrib.auth.decorators import permission_required
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from plc_core.plc_well_ops import PlcMeasurements
 
+from .permissions import WellPumpModePermission
 from .serializers import WellLogEntrySerializer
 
 
@@ -23,6 +25,7 @@ def current_well_logs(request):
 
 
 @api_view(['POST'])
+@permission_classes((WellPumpModePermission, ))
 def set_pump_mode(request):
     well_name = request.data.get('well_name', '')
     new_mode = request.data.get('new_mode', '')

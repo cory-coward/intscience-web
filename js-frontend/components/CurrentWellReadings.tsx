@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { format } from "date-fns";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
 import LoadingComponent from "./LoadingComponent";
 import RunningStatusIndicator from "./RunningStatusIndicator";
 import getCookie from "../helpers/getCookie";
@@ -94,8 +95,13 @@ export default function Home() {
                 }
                 setIsLoading(false);
             })
-            .catch(error => {
-                console.error(error);
+            .catch((error: AxiosError) => {
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        toast.error("You do not have sufficient permission to perform this action.");
+                    }
+                }
+                // console.error(error);
                 setIsLoading(false);
             });
     };
