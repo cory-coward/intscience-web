@@ -5,7 +5,7 @@ from datetime import datetime
 @dataclass
 class PLCItem:
     source_tag: str = ''
-    pump_mode: str = 'Auto'
+    pump_mode: str = ''
     is_running: bool = False
     flow_rate: float = 0.0
     flow_total: float = 0.0
