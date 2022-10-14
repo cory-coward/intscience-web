@@ -11,8 +11,8 @@ class WellLogEntry(models.Model):
     )
 
     well_name = models.CharField(max_length=25)
-    gal_per_minute = models.FloatField(default=0, null=True, blank=True)
-    total_gal = models.FloatField(default=0, null=True, blank=True)
+    gal_per_minute = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True, blank=True)
+    total_gal = models.DecimalField(max_digits=10, decimal_places=1, default=0, null=True, blank=True)
     pump_mode = models.CharField(max_length=20, choices=PUMP_MODE_CHOICES, default=AUTO)
     is_running = models.BooleanField(default=False, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)

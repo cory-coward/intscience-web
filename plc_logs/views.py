@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.decorators import permission_required
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status

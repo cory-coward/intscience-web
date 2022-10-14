@@ -2,6 +2,7 @@ import pytz
 import time
 
 from datetime import datetime
+from decimal import Decimal
 from typing import List
 
 from django.conf import settings
@@ -107,8 +108,8 @@ class PlcMeasurements:
             for item in plc_items:
                 log_entry = WellLogEntry()
                 log_entry.well_name = item.source_tag
-                log_entry.gal_per_minute = item.flow_rate
-                log_entry.total_gal = item.flow_total
+                log_entry.gal_per_minute = Decimal(item.flow_rate)
+                log_entry.total_gal = Decimal(item.flow_total)
                 log_entry.pump_mode = WellLogEntry.AUTO if item.pump_mode == 'Auto' else WellLogEntry.MANUAL
                 log_entry.is_running = item.is_running
 
