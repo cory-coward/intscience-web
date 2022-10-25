@@ -17,22 +17,8 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                // exclude: /node_modules/,
-                include: path.resolve(__dirname, "js-frontend"),
                 use: ["style-loader", "css-loader", "postcss-loader"],
             },
-            // {
-            //     test: /\.(png|svg|jpg|gif)$/,
-            //     exclude: /node_modules/,
-            //     use: [
-            //         {
-            //             loader: "file-loader",
-            //             options: {
-            //                 name: "[name].[ext]",
-            //             }
-            //         },
-            //     ]
-            // },
         ]
     },
     resolve: {
