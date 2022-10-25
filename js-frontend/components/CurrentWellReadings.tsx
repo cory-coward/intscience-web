@@ -180,10 +180,10 @@ export default function Home() {
                                                     {entry.well_name}
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
-                                                    {entry.gal_per_minute}
+                                                    {entry.gal_per_minute.toFixed(1)}
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
-                                                    {entry.total_gal}
+                                                    {entry.total_gal.toFixed(1)}
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-2 text-sm text-gray-500">
                                                     {format(new Date(entry.timestamp.toString()), "MMM d, yyyy hh:mm:ss a")}
