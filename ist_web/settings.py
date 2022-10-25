@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     # 3rd party
     'rangefilter',
+    'import_export',
     'rest_framework',
 
     # Local
