@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from plc_config.models import GeneralConfig, WellConfig, AirStripperConfig
-from plc_logs.models import WellLogEntry
+from plc_logs.models import WellLogEntry, AirStripperLogEntry
 
 from .plc_alarms import process_alarms
 from .plc_core import PlcCore, PlcResponse
@@ -26,8 +26,8 @@ def read_plc_tags(ignore_period: bool = False):
     # Load in plc items from db
     wells = WellConfig.objects.all()
     air_strippers = AirStripperConfig.objects.all()
-    num_wells = WellConfig.objects.count()
-    num_air_strippers = AirStripperConfig.objects.count()
+    # num_wells = WellConfig.objects.count()
+    # num_air_strippers = AirStripperConfig.objects.count()
 
     # Load in plc_readings_count from cache
     count_from_cache = cache.get(settings.CACHE_KEY_WELL_READINGS_COUNT)
@@ -53,13 +53,9 @@ def read_plc_tags(ignore_period: bool = False):
         tags_to_read.append(f'{well.tag_prefix}.FlowRate')
         tags_to_read.append(f'{well.tag_prefix}.FlowTotal')
 
-    # for air_str in air_strippers:
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.Dial')
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.AlarmTime')
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.AckTime')
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.ClearTime')
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.Control.Active')
-    #     tags_to_read.append(f'{air_str.tag_prefix}.HH_Alarm.Control.Count')
+    for air_str in air_strippers:
+        tags_to_read.append(f'{air_str.tag_prefix}.Pump.Runtime')
+        tags_to_read.append(f'{air_str.tag_prefix}.Blower.Runtime')
 
     # Read list of tags
     plc = PlcCore(ip_address=settings.PLC_IP)
@@ -79,13 +75,25 @@ def read_plc_tags(ignore_period: bool = False):
 
         plc_well_items.append(well_item)
 
+    for air_stripper in air_strippers:
+        related_tags = [res for res in tags_response if res.TagName.startswith(air_stripper.tag_prefix)]
+
+        air_stripper_item = PlcAirStripperItem()
+        air_stripper_item.source_tag = air_stripper.tag_prefix
+        air_stripper_item.pump_runtime = [x for x in related_tags if x.TagName.endswith('Pump.Runtime')][0].Value
+        air_stripper_item.blower_runtime = [x for x in related_tags if x.TagName.endswith('Blower.Runtime')][0].Value
+
+        plc_air_stripper_items.append(air_stripper_item)
+
     # Check if we need to add well measurements to db
-    print(f'Well readings count: {plc_readings_count}')
-    print(f'Well record time: {well_record_time}')
+    print(f'PLC readings count: {plc_readings_count}')
+    print(f'PLC record time: {well_record_time}')
     if ignore_period is True or (plc_readings_count * 15 == well_record_time * 60):
         # Save to db and reset record_counter
         print('Saving to db')
+
         well_db_objects: List[WellLogEntry] = []
+        air_stripper_db_objects: List[AirStripperLogEntry] = []
 
         for well_item in plc_well_items:
             log_entry = WellLogEntry()
@@ -97,7 +105,16 @@ def read_plc_tags(ignore_period: bool = False):
 
             well_db_objects.append(log_entry)
 
+        for air_stripper_item in plc_air_stripper_items:
+            log_entry = AirStripperLogEntry()
+            log_entry.air_stripper_name = air_stripper_item.source_tag
+            log_entry.pump_runtime = air_stripper_item.pump_runtime
+            log_entry.blower_runtime = air_stripper_item.blower_runtime
+
+            air_stripper_db_objects.append(log_entry)
+
         WellLogEntry.objects.bulk_create(well_db_objects)
+        AirStripperLogEntry.objects.bulk_create(air_stripper_db_objects)
         cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
     else:
         # Increment record_counter

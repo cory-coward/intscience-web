@@ -5,12 +5,17 @@ from datetime import datetime
 from import_export import resources
 from import_export.admin import ExportMixin
 
-from .models import WellLogEntry
+from .models import WellLogEntry, AirStripperLogEntry
 
 
 class WellLogEntryResource(resources.ModelResource):
     class Meta:
         model = WellLogEntry
+
+
+class AirStripperLogEntryResource(resources.ModelResource):
+    class Meta:
+        model = AirStripperLogEntry
 
 
 class WellLogEntryAdmin(ExportMixin, admin.ModelAdmin):
@@ -27,4 +32,19 @@ class WellLogEntryAdmin(ExportMixin, admin.ModelAdmin):
         return 'Well Log Entry Date/Time'
 
 
+class AirStripperLogEntryAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ('air_stripper_name', 'pump_runtime', 'blower_runtime', 'timestamp', )
+    list_filter = (('timestamp', DateRangeFilter), 'air_stripper_name', )
+    list_per_page = 25
+    readonly_fields = ('air_stripper_name', 'pump_runtime', 'blower_runtime', 'timestamp', )
+    resource_classes = [AirStripperLogEntryResource, ]
+
+    def get_rangefilter_timestamp_default(self, request):
+        return datetime.today, datetime.today
+
+    def get_rangefilter_timestamp_title(self, request, field_path):
+        return 'Air Stripper Log Entry Date/Time'
+
+
 admin.site.register(WellLogEntry, WellLogEntryAdmin)
+admin.site.register(AirStripperLogEntry, AirStripperLogEntryAdmin)
