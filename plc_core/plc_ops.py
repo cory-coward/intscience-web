@@ -82,7 +82,7 @@ def read_plc_tags(ignore_period: bool = False):
     # Check if we need to add well measurements to db
     print(f'Well readings count: {plc_readings_count}')
     print(f'Well record time: {well_record_time}')
-    if ignore_period is True or (plc_readings_count * 10 == well_record_time * 60):
+    if ignore_period is True or (plc_readings_count * 15 == well_record_time * 60):
         # Save to db and reset record_counter
         print('Saving to db')
         well_db_objects: List[WellLogEntry] = []
