@@ -125,7 +125,8 @@ def send_alerts(dry_run: bool = False):
         return
 
     # Load in all user emails who receive alarm emails
-    alarm_recipients = CustomUser.objects.filter(receives_alert_emails=True)
+    email_recipients = CustomUser.objects.filter(receives_alert_emails=True)
+    text_recipients = CustomUser.objects.filter(receives_text_alerts=True)
 
     # Load in alarms from db that need to be processed
     unprocessed_alarms = PLCAlarm.objects.filter(is_active=True, receives_alerts=True)
@@ -148,8 +149,13 @@ def send_alerts(dry_run: bool = False):
         email_from: str = gmail_user
         email_to: List[str] = []
 
-        for recipient in alarm_recipients:
+        for recipient in email_recipients:
             email_to.append(recipient.email)
+
+        for recipient in text_recipients:
+            if recipient.receives_text_alerts is True and (recipient.text_to_address is not None
+                                                           or recipient.text_to_address != ''):
+                email_to.append(recipient.text_to_address)
 
         email_body: MIMEMultipart = MIMEMultipart('alternative')
         email_body['Subject'] = 'IST Grenada PLC Alert'
