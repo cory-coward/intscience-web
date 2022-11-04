@@ -18,6 +18,14 @@
     <nav class="main_nav">
         <h3 class="site_logo">Integrated Science &amp; Technology</h3>
         <div class="main_nav__links">
+            {% if user.is_staff %}
+                <a
+                    href="/admin/"
+                    class="{% if request.path == dashboard_home %}main_nav__active_navlink{% else %}main_nav__navlink{% endif %}"
+                >
+                    Admin
+                </a>
+            {% endif %}
             <a
                 href="/dashboard/current-well-readings/"
                 class="{% if request.path == dashboard_home %}main_nav__active_navlink{% else %}main_nav__navlink{% endif %}"
