@@ -9,9 +9,10 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ('username', 'first_name', 'last_name', 'email', 'receives_alert_emails', 'is_active', )
+    list_display = ('username', 'first_name', 'last_name', 'email', 'receives_alert_emails', 'receives_text_alerts',
+                    'is_active', )
     list_per_page = 10
-    list_editable = ('receives_alert_emails', 'is_active', )
+    list_editable = ('receives_alert_emails', 'receives_text_alerts', 'is_active', )
     fieldsets = (
         ('Account and Personal Information',
          {'fields': ('username', 'password', 'first_name', 'last_name', 'email', 'text_to_address',

@@ -5,7 +5,6 @@ import pytz
 import smtplib
 
 from django.conf import settings
-from django.core.cache import cache
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -60,22 +59,11 @@ def process_alarms():
     # Load active alarms from db
     active_alarms_in_db = PLCAlarm.objects.filter(is_active=True).order_by('-timestamp')
 
-    # Filter out items with an alarm from plc_items
-    active_alarms_in_plc = [x for x in current_active_alarms if x.alarm_active is True]
-
-    # Load in well_readings_count from cache
-    count_from_cache = cache.get(settings.CACHE_KEY_WELL_ALARMS_COUNT)
-    if count_from_cache is None:
-        cache.set(settings.CACHE_KEY_WELL_ALARMS_COUNT, 1, None)
-        well_alarms_count = 1
-    else:
-        well_alarms_count = count_from_cache
-
     # Loop through active_alarms
     for a in active_alarms_in_db:
         # alarm_matches contains newly recorded alarms that already exist in the db
-        alarm_matches = [x for x in active_alarms_in_plc
-                         if x.alarm_time == a.tag_name and x.alarm_time == a.timestamp]
+        alarm_matches = [x for x in current_active_alarms
+                         if x.alarm_tag == a.tag_name and x.alarm_time == a.timestamp]
 
         if len(alarm_matches) > 0:
             # alarm_matches can only have one element since tag/timestamp are unique
@@ -85,14 +73,14 @@ def process_alarms():
             a.timestamp_cleared = alarm_matches[0].clear_time
 
             # If there is a match, then remove from plc_items
-            active_alarms_in_plc.remove(alarm_matches[0])
+            current_active_alarms.remove(alarm_matches[0])
         else:
             # alarm is not active - set as inactive and update timestamps
             a.is_active = False
 
     # Remaining items in plc_items are not in db--save them
     new_alarms: List[PLCAlarm] = []
-    for remaining_item in active_alarms_in_plc:
+    for remaining_item in current_active_alarms:
         new_alarm = PLCAlarm()
         new_alarm.tag_name = remaining_item.alarm_tag
         new_alarm.description = remaining_item.alarm_description
@@ -107,13 +95,6 @@ def process_alarms():
                                  ['is_active', 'alarm_count', 'timestamp', 'timestamp_acknowledged',
                                   'timestamp_cleared', ])
     PLCAlarm.objects.bulk_create(new_alarms)
-
-    # Send alert emails
-    # if well_alarms_count * 10 == 60:
-    #     # email_success: bool = PlcAlarms.send_alerts()
-    #     cache.set(settings.CACHE_KEY_WELL_ALARMS_COUNT, 1, None)
-    # else:
-    #     cache.set(settings.CACHE_KEY_WELL_ALARMS_COUNT, well_alarms_count + 1, None)
 
 
 def send_alerts(dry_run: bool = False):
