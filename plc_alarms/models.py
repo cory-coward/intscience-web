@@ -3,7 +3,11 @@ from django.db import models
 
 class PLCAlarm(models.Model):
     tag_name = models.CharField(max_length=50)
+    description = models.CharField(max_length=250, blank=True)
     is_active = models.BooleanField(default=True)
+    receives_alerts = models.BooleanField(default=True)
+    email_sent = models.BooleanField(default=False)
+    email_sent_counter = models.PositiveIntegerField(default=1)
     alarm_count = models.IntegerField(default=0)
     timestamp = models.DateTimeField(null=True, blank=True)
     timestamp_acknowledged = models.DateTimeField(null=True, blank=True)

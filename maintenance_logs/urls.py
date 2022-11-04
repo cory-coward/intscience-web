@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import MaintenanceLogListView, MaintenanceLogDetailView, MaintenanceLogCreateView,\
-    GardnerDenverLogListView, GardnerDenverLogDetailView, GardnerDenverLogCreateView, plc_test_view
+    GardnerDenverLogListView, GardnerDenverLogDetailView, GardnerDenverLogCreateView
 
 app_name = 'maintenance_logs'
 urlpatterns = [
@@ -11,5 +11,4 @@ urlpatterns = [
     path('gardner-denver-logs/', GardnerDenverLogListView.as_view(), name='gardner-denver-logs'),
     path('gardner-denver-logs/<int:pk>/', GardnerDenverLogDetailView.as_view(), name='gardner-denver-log-detail'),
     path('gardner-denver-logs/add/', GardnerDenverLogCreateView.as_view(), name='create-gardner-denver-log'),
-    path('test/', plc_test_view, name='plc-test'),
 ]

@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import LoadingComponent from "./LoadingComponent";
 import RunningStatusIndicator from "./RunningStatusIndicator";
 import getCookie from "../helpers/getCookie";
-import "@progress/kendo-theme-default/dist/all.css";
 
 interface IWellLogEntry {
     id: number;

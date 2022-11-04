@@ -6,9 +6,6 @@ from django.views.generic import ListView, DetailView, CreateView
 from .forms import MaintenanceLogForm, GardnerDenverLogForm
 from .models import MaintenanceLog, GardnerDenverLog
 
-from django.shortcuts import render
-from plc_core.plc_well_ops import PlcMeasurements
-
 
 class MaintenanceLogListView(LoginRequiredMixin, ListView):
     model = MaintenanceLog
@@ -57,8 +54,3 @@ class GardnerDenverLogCreateView(LoginRequiredMixin, PermissionRequiredMixin, Su
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(GardnerDenverLogCreateView, self).form_valid(form)
-
-
-def plc_test_view(request):
-    PlcMeasurements.read_wells()
-    return render(request, 'maintenance_logs/test.html', {})

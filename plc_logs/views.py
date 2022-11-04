@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from plc_core.plc_well_ops import PlcMeasurements
+from plc_core.plc_ops import read_plc_tags, set_well_mode
 
 from .permissions import WellPumpModePermission
 from .serializers import WellLogEntrySerializer
@@ -29,13 +29,13 @@ def set_pump_mode(request):
     well_name = request.data.get('well_name', '')
     new_mode = request.data.get('new_mode', '')
 
-    response: bool = PlcMeasurements.set_well_mode(well_name, new_mode)
+    response: bool = set_well_mode(well_name, new_mode)
 
     http_status: int = 0
 
     if response is True:
         http_status = status.HTTP_200_OK
-        PlcMeasurements.read_wells()
+        read_plc_tags()
     else:
         http_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
