@@ -128,12 +128,14 @@ def send_alerts(dry_run: bool = False):
     alarm_recipients = CustomUser.objects.filter(receives_alert_emails=True)
 
     # Load in alarms from db that need to be processed
-    unprocessed_alarms = PLCAlarm.objects.filter(is_active=True)
+    unprocessed_alarms = PLCAlarm.objects.filter(is_active=True, receives_alerts=True)
 
     tags_to_email: List[str] = []
     for alarm in unprocessed_alarms:
         if alarm.email_sent is False:
-            tags_to_email.append(f'{alarm.tag_name} - {alarm.timestamp.strftime("%m/%d/%Y %H:%M:%S")}')
+            tags_to_email.append(
+                f'{alarm.description} ({alarm.tag_name}) - {alarm.timestamp.strftime("%m/%d/%Y %H:%M:%S")}'
+            )
 
     # Get email reset counter
     gen_conf = GeneralConfig.objects.order_by('id').last()
