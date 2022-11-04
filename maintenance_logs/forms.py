@@ -16,7 +16,4 @@ class MaintenanceLogForm(forms.ModelForm):
 class GardnerDenverLogForm(forms.ModelForm):
     class Meta:
         model = GardnerDenverLog
-        fields = ('log_text', )
-        labels = {'log_text': _('Gardner Denver log text')}
-        help_texts = {'log_text': _('Enter the text for your Gardner Denver measurements.')}
-        widgets = {'log_text': forms.Textarea(attrs={'rows': 5, }), }
+        exclude = ('created_on', 'modified_on', 'author', )

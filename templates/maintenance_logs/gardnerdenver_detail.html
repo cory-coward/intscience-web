@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load custom_tags %}
+
 {% block content %}
     <main class="main_container">
         <h3>Gardner Denver Log Details</h3>
@@ -9,7 +11,42 @@
             <p><span class="font-bold">Log timestamp:</span> {{ gardnerdenverlog.created_on }}</p>
             <div>
                 <p class="font-bold">Log contents:</p>
-                <p>{{ gardnerdenverlog.log_text }}</p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "advisory_number" %}:</em> {{ gardnerdenverlog.advisory_number }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "blower_hours" %}:</em> {{ gardnerdenverlog.blower_hours }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "bar_pressure" %}:</em> {{ gardnerdenverlog.bar_pressure }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "blower_post_vacuum" %}:</em> {{ gardnerdenverlog.blower_post_vacuum }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "blower_exhaust_temp" %}:</em> {{ gardnerdenverlog.blower_exhaust_temp }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "zone_1_2_flow" %}:</em> {{ gardnerdenverlog.zone_1_2_flow }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "combined_flow" %}:</em> {{ gardnerdenverlog.combined_flow }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "pid_cv_influent" %}:</em> {{ gardnerdenverlog.pid_cv_influent }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "pid_mid_carbon" %}:</em> {{ gardnerdenverlog.pid_mid_carbon }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "pid_cv_effluent" %}:</em> {{ gardnerdenverlog.pid_cv_effluent }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "pressure_cv_influent" %}:</em> {{ gardnerdenverlog.pressure_cv_influent }}
+                </p>
+                <p>
+                    <em>{% verbose_name gardnerdenverlog "pressure_bet_cvs" %}:</em> {{ gardnerdenverlog.pressure_bet_cvs }}
+                </p>
             </div>
         </div>
         <a href="{% url 'maintenance_logs:gardner-denver-logs' %}" class="button">Back to Gardner Denver logs</a>

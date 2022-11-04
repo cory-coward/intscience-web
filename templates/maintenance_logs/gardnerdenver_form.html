@@ -10,12 +10,13 @@
                     {{ hidden }}
                 {% endfor %}
                 {% for field in form.visible_fields %}
-                    {% for error in field.errors %}
-                        <p class="form_error">{{ error }}</p>
-                    {% endfor %}
-                    {{ field.label_tag }}
-                    {{ field }}
-                    <p class="form_help_text">{{ field.help_text }}</p>
+                    <div class="form_field">
+                        {% for error in field.errors %}
+                            <p class="form_error">{{ error }}</p>
+                        {% endfor %}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
                 {% endfor %}
                 <input type="submit" class="button" value="Submit" />
             </form>

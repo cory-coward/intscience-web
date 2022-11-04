@@ -103,7 +103,8 @@ a {
     color: var(--text);
 }
 
-.logs_form textarea {
+.logs_form textarea,
+.form_field input {
     padding: 0.5rem 1rem;
     font-family: inherit;
     outline: 1px solid transparent;
@@ -112,7 +113,8 @@ a {
     transition: all 150ms ease-in-out;
 }
 
-.logs_form textarea:focus {
+.logs_form textarea:focus,
+.form_field input:focus {
     outline: 1px solid var(--indigo-dark);
     border: 1px solid var(--indigo-dark);
 }
@@ -120,6 +122,21 @@ a {
 .logs_form input[type="submit"] {
     margin: 1.2rem 0 0.5rem;
 }
+
+.form_field {
+    margin-bottom: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+}
+
+.form_field label {
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+/*.form_field input {*/
+/*    padding: 0.25rem 0.4rem;*/
+/*}*/
 
 .form_error {
     margin-bottom: 0.7rem;
