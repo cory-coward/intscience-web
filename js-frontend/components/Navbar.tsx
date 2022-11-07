@@ -10,6 +10,12 @@ export default function Navbar() {
             >
                 Current Well Readings
             </NavLink>
+            <NavLink
+                to="/air-stripper-readings"
+                className={({ isActive }) => (isActive ? "active-navlink" : "navlink")}
+            >
+                Air Stripper Readings
+            </NavLink>
         </div>
     )
 }

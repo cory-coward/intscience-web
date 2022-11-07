@@ -34,7 +34,7 @@ export default function Home() {
     const disabledButton: string = "text-gray-500 border-gray-300";
 
     const loadData = () => {
-        axios.get<IWellLogEntry[]>("/api/v1/well-logs/current-well-logs")
+        axios.get<IWellLogEntry[]>("/api/v1/plc-logs/current-well-logs")
             .then(res => {
                 const entriesFromServer: IWellLogEntry[] = [];
 

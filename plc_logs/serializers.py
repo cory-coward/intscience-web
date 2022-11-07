@@ -16,3 +16,17 @@ class WellLogEntrySerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class AirStripperLogEntrySerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    air_stripper_name = serializers.CharField(max_length=25)
+    pump_runtime = serializers.FloatField(default=0)
+    blower_runtime = serializers.FloatField(default=0)
+    timestamp = serializers.DateTimeField()
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass

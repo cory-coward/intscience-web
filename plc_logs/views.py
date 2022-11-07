@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from plc_core.plc_ops import read_plc_tags, set_well_mode
 
 from .permissions import WellPumpModePermission
-from .serializers import WellLogEntrySerializer
+from .serializers import WellLogEntrySerializer, AirStripperLogEntrySerializer
 
 
 @api_view(['GET'])
@@ -20,6 +20,18 @@ def current_well_logs(request):
         return Response({})
 
     serializer = WellLogEntrySerializer(cached_well_readings, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@csrf_exempt
+def current_air_stripper_logs(request):
+    cached_air_stripper_readings = cache.get(settings.CACHE_KEY_CURRENT_AIR_STRIPPER_READINGS)
+
+    if cached_air_stripper_readings is None:
+        return Response({})
+
+    serializer = AirStripperLogEntrySerializer(cached_air_stripper_readings, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 

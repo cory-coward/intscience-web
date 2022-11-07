@@ -122,6 +122,7 @@ def read_plc_tags(ignore_period: bool = False):
 
     # Save well readings to cache
     well_cache_objects = []
+    air_stripper_cache_objects = []
     for well_item in plc_well_items:
         wc = {
             'well_name': well_item.source_tag,
@@ -133,7 +134,17 @@ def read_plc_tags(ignore_period: bool = False):
         }
         well_cache_objects.append(wc)
 
+    for air_stripper_item in plc_air_stripper_items:
+        air_str_c = {
+            'air_stripper_name': air_stripper_item.source_tag,
+            'pump_runtime': air_stripper_item.pump_runtime,
+            'blower_runtime': air_stripper_item.blower_runtime,
+            'timestamp': datetime.now(ctz)
+        }
+        air_stripper_cache_objects.append(air_str_c)
+
     cache.set(settings.CACHE_KEY_CURRENT_WELL_READINGS, well_cache_objects, None)
+    cache.set(settings.CACHE_KEY_CURRENT_AIR_STRIPPER_READINGS, air_stripper_cache_objects, None)
 
     # Process alarms
     process_alarms()
