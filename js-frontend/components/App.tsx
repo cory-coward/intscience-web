@@ -4,6 +4,7 @@ import { Slide, ToastContainer} from "react-toastify";
 import AirStripperReadings from "./AirStripperReadings";
 import CurrentWellReadings from "./CurrentWellReadings";
 import Layout from "./Layout";
+import CurrentAlarms from "./CurrentAlarms";
 
 export default function App() {
     return (
@@ -19,6 +20,7 @@ export default function App() {
                 <Route element={<Layout />}>
                     <Route path="/current-well-readings" element={<CurrentWellReadings />} />
                     <Route path="/air-stripper-readings" element={<AirStripperReadings />} />
+                    <Route path="/current-alarms" element={<CurrentAlarms />} />
                 </Route>
             </Routes>
         </>
