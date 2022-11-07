@@ -140,6 +140,9 @@ CACHE_KEY_WELL_READINGS_COUNT = 'well_readings_count'
 CACHE_KEY_WELL_ALARMS_COUNT = 'well_alarms_count'
 CACHE_KEY_CURRENT_WELL_READINGS = 'current_well_readings'
 CACHE_KEY_CURRENT_AIR_STRIPPER_READINGS = 'current_air_stripper_readings'
+CACHE_KEY_CURRENT_ZONE_FLOW_READINGS = 'current_zone_flow_readings',
+CACHE_KEY_CURRENT_GARDNER_DENVER_READINGS = 'current_gardner_denver_readings',
+CACHE_KEY_CURRENT_HEAT_EXCHANGER_READINGS = 'current_heat_exchanger_readings',
 CACHE_KEY_CURRENT_ALARMS = 'current_alarms'
 
 # LOGGING = {
