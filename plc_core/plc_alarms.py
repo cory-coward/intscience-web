@@ -1,10 +1,11 @@
-from datetime import datetime
-from typing import List
 import os
 import pytz
 import smtplib
+from datetime import datetime
+from typing import List
 
 from django.conf import settings
+from django.core.cache import cache
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -55,6 +56,22 @@ def process_alarms():
         )
 
         current_active_alarms.append(item)
+
+    # Add current_active_alarms to cache for display on frontend
+    alarm_cache_objects = []
+    for curr_alarm in current_active_alarms:
+        aco = {
+            'alarm_tag': curr_alarm.alarm_tag,
+            'alarm_description': curr_alarm.alarm_description,
+            'dial': curr_alarm.dial,
+            'alarm_time': curr_alarm.alarm_time,
+            'ack_time': curr_alarm.ack_time,
+            'clear_time': curr_alarm.clear_time,
+        }
+
+        alarm_cache_objects.append(aco)
+
+    cache.set(settings.CACHE_KEY_CURRENT_ALARMS, alarm_cache_objects, None)
 
     # Load active alarms from db
     active_alarms_in_db = PLCAlarm.objects.filter(is_active=True).order_by('-timestamp')

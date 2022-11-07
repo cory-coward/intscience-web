@@ -8,5 +8,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
     path('api/v1/plc-logs/', include('plc_logs.urls')),
+    path('api/v1/plc-alarms/', include('plc_alarms.urls')),
     path('api-auth/', include('rest_framework.urls')),
 ]

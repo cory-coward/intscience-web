@@ -140,6 +140,7 @@ CACHE_KEY_WELL_READINGS_COUNT = 'well_readings_count'
 CACHE_KEY_WELL_ALARMS_COUNT = 'well_alarms_count'
 CACHE_KEY_CURRENT_WELL_READINGS = 'current_well_readings'
 CACHE_KEY_CURRENT_AIR_STRIPPER_READINGS = 'current_air_stripper_readings'
+CACHE_KEY_CURRENT_ALARMS = 'current_alarms'
 
 # LOGGING = {
 #     'version': 1,
