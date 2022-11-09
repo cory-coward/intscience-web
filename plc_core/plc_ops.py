@@ -72,8 +72,8 @@ def read_plc_tags(ignore_period: bool = False):
     tags_to_read.append('GD_Blower.IntakeTemperature')
 
     # Heat exchanger tags
-    tags_to_read.append('HeatExchanger.FlowRate')
-    tags_to_read.append('HeatExchanger.FlowTotal')
+    tags_to_read.append('HeatExchanger.WaterInFlowRate')
+    tags_to_read.append('HeatExchanger.WaterInFlowTotal')
     tags_to_read.append('HeatExchanger.Pressure')
     tags_to_read.append('HeatExchanger.OutletAirTemp')
 
@@ -122,9 +122,9 @@ def read_plc_tags(ignore_period: bool = False):
     # Heat exchanger
     heat_exchanger_related_tags = [x for x in tags_response if x.TagName.startswith('HeatExchanger')]
     plc_heat_exchanger_item.flow_rate = [x for x in heat_exchanger_related_tags
-                                         if x.TagName.endswith('FlowRate')][0].Value
+                                         if x.TagName.endswith('WaterInFlowRate')][0].Value
     plc_heat_exchanger_item.flow_total = [x for x in heat_exchanger_related_tags
-                                          if x.TagName.endswith('FlowTotal')][0].Value
+                                          if x.TagName.endswith('WaterInFlowTotal')][0].Value
     plc_heat_exchanger_item.pressure = [x for x in heat_exchanger_related_tags
                                         if x.TagName.endswith('Pressure')][0].Value
     plc_heat_exchanger_item.outlet_air_temp = [x for x in heat_exchanger_related_tags
