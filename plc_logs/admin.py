@@ -6,7 +6,7 @@ from import_export import resources
 from import_export.admin import ExportMixin
 
 from .models import WellLogEntry, AirStripperLogEntry, ZoneFlowLogEntry, GardnerDenverBlowerLogEntry, \
-    HeatExchangerLogEntry
+    HeatExchangerLogEntry, SurgeTankLogEntry, DischargeWaterLogEntry
 
 
 class WellLogEntryResource(resources.ModelResource):
@@ -32,6 +32,16 @@ class GardnerDenverLogEntryResource(resources.ModelResource):
 class HeatExchangerLogEntryResource(resources.ModelResource):
     class Meta:
         model = HeatExchangerLogEntry
+
+
+class SurgeTankLogEntryResource(resources.ModelResource):
+    class Meta:
+        model = SurgeTankLogEntry
+
+
+class DischargeWaterLogEntryResource(resources.ModelResource):
+    class Meta:
+        model = DischargeWaterLogEntry
 
 
 class WellLogEntryAdmin(ExportMixin, admin.ModelAdmin):
@@ -103,10 +113,37 @@ class HeatExchangerLogEntryAdmin(ExportMixin, admin.ModelAdmin):
     def get_rangefilter_timestamp_title(self, request, field_path):
         return 'Heat Exchanger Log Entry Date/Time'
 
+class DischargeWaterLogEntryAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ('flow_rate', 'flow_total', 'timestamp',)
+    list_filter = (('timestamp', DateRangeFilter),)
+    list_per_page = 25
+    readonly_fields = ('flow_rate', 'flow_total', 'timestamp',)
+    resource_classes = [DischargeWaterLogEntryResource, ]
+
+    def get_rangefilter_timestamp_default(self, request):
+        return datetime.today, datetime.today
+
+    def get_rangefilter_timestamp_title(self, request, field_path):
+        return 'Discharge Water Log Entry Date/Time'
+
+class SurgeTankLogEntryAdmin(ExportMixin, admin.ModelAdmin):
+    list_display = ('flow_rate', 'flow_total', 'timestamp',)
+    list_filter = (('timestamp', DateRangeFilter),)
+    list_per_page = 25
+    readonly_fields = ('flow_rate', 'flow_total', 'timestamp',)
+    resource_classes = [SurgeTankLogEntryResource, ]
+
+    def get_rangefilter_timestamp_default(self, request):
+        return datetime.today, datetime.today
+
+    def get_rangefilter_timestamp_title(self, request, field_path):
+        return 'Surge Tank Log Entry Date/Time'
+
 
 admin.site.register(WellLogEntry, WellLogEntryAdmin)
 admin.site.register(AirStripperLogEntry, AirStripperLogEntryAdmin)
 admin.site.register(ZoneFlowLogEntry, ZoneFlowLogEntryAdmin)
 admin.site.register(GardnerDenverBlowerLogEntry, GardnerDenverLogEntryAdmin)
 admin.site.register(HeatExchangerLogEntry, HeatExchangerLogEntryAdmin)
-
+admin.site.register(SurgeTankLogEntry, SurgeTankLogEntryAdmin)
+admin.site.register(DischargeWaterLogEntry, DischargeWaterLogEntryAdmin)

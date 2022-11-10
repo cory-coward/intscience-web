@@ -10,11 +10,12 @@ from django.core.cache import cache
 
 from plc_config.models import GeneralConfig, WellConfig, AirStripperConfig
 from plc_logs.models import WellLogEntry, AirStripperLogEntry, ZoneFlowLogEntry, GardnerDenverBlowerLogEntry, \
-    HeatExchangerLogEntry
+    HeatExchangerLogEntry, SurgeTankLogEntry, DischargeWaterLogEntry
 
 from .plc_alarms import process_alarms
 from .plc_core import PlcCore, PlcResponse
-from .plc_items import PlcWellItem, PlcAirStripperItem, PlcZoneFlowItem, PlcGardnerDenverItem, PlcHeatExchangerItem
+from .plc_items import PlcWellItem, PlcAirStripperItem, PlcZoneFlowItem, PlcGardnerDenverItem, PlcHeatExchangerItem, \
+    PlcSurgeTankItem, PlcDischargeWaterItem
 
 
 def read_plc_tags(ignore_period: bool = False):
@@ -44,6 +45,8 @@ def read_plc_tags(ignore_period: bool = False):
     plc_zone_flow_item: PlcZoneFlowItem = PlcZoneFlowItem()
     plc_gardner_denver_item: PlcGardnerDenverItem = PlcGardnerDenverItem()
     plc_heat_exchanger_item: PlcHeatExchangerItem = PlcHeatExchangerItem()
+    plc_surge_tank_item: PlcSurgeTankItem = PlcSurgeTankItem()
+    plc_Discharge_Water_item: PlcDischargeWaterItem = PlcDischargeWaterItem()
 
     # Configure list of tags to read
     tags_to_read: List[str] = []
@@ -76,6 +79,14 @@ def read_plc_tags(ignore_period: bool = False):
     tags_to_read.append('HeatExchanger.WaterInFlowTotal')
     tags_to_read.append('HeatExchanger.Pressure')
     tags_to_read.append('HeatExchanger.OutletAirTemp')
+
+    # Surge tank tags
+    tags_to_read.append('ST1.FlowRate')
+    tags_to_read.append('ST1.FlowTotal')
+
+    # Discharge Water tags
+    tags_to_read.append('DischargeWater_FlowRate')
+    tags_to_read.append('DischargeWater_FlowTotal')
 
     # Read list of tags
     plc = PlcCore(ip_address=settings.PLC_IP)
@@ -130,6 +141,18 @@ def read_plc_tags(ignore_period: bool = False):
     plc_heat_exchanger_item.outlet_air_temp = [x for x in heat_exchanger_related_tags
                                                if x.TagName.endswith('OutletAirTemp')][0].Value
 
+    # Surge Tank
+    surge_tank_related_tags = [x for x in tags_response if x.TagName.startswith('ST1')]
+    plc_surge_tank_item.flow_rate = [x for x in surge_tank_related_tags if x.TagName.endswith('FlowRate')][0].Value
+    plc_surge_tank_item.flow_total = [x for x in surge_tank_related_tags if x.TagName.endswith('FlowTotal')][0].Value
+
+    # Discharge water
+    discharge_water_related_tags = [x for x in tags_response if x.TagName.startswith('Discharge')]
+    plc_Discharge_Water_item.flow_rate = [x for x in discharge_water_related_tags
+                                          if x.TagName.endswith('FlowRate')][0].Value
+    plc_Discharge_Water_item.flow_total = [x for x in discharge_water_related_tags
+                                           if x.TagName.endswith('FlowTotal')][0].Value
+
     # Check if we need to add well measurements to db
     print(f'PLC readings count: {plc_readings_count}')
     print(f'PLC record time: {well_record_time}')
@@ -177,11 +200,23 @@ def read_plc_tags(ignore_period: bool = False):
         heat_exchanger_log_entry.pressure = plc_heat_exchanger_item.pressure
         heat_exchanger_log_entry.outlet_air_temp = plc_heat_exchanger_item.outlet_air_temp
 
+        # Surge tank
+        surge_tank_log_entry = SurgeTankLogEntry()
+        surge_tank_log_entry.flow_rate = plc_surge_tank_item.flow_rate
+        surge_tank_log_entry.flow_total = plc_surge_tank_item.flow_total
+
+        # Discharge water
+        discharge_water_log_entry = DischargeWaterLogEntry()
+        discharge_water_log_entry.flow_rate = plc_Discharge_Water_item.flow_rate
+        discharge_water_log_entry.flow_total = plc_Discharge_Water_item.flow_total
+
         WellLogEntry.objects.bulk_create(well_db_objects)
         AirStripperLogEntry.objects.bulk_create(air_stripper_db_objects)
         gd_log_entry.save()
         zone_flow_log_entry.save()
         heat_exchanger_log_entry.save()
+        surge_tank_log_entry.save()
+        discharge_water_log_entry.save()
 
         cache.set(settings.CACHE_KEY_WELL_READINGS_COUNT, 1, None)
     else:

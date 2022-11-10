@@ -85,3 +85,29 @@ class HeatExchangerLogEntry(models.Model):
 
     def __str__(self):
         return f'Heat Exchanger Log {self.timestamp}'
+
+
+class SurgeTankLogEntry(models.Model):
+    flow_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    flow_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Surge Tank Log Entry'
+        verbose_name_plural = 'Surge Tank Log Entries'
+
+    def __str__(self):
+        return f'Surge Tank Log {self.timestamp}'
+
+
+class DischargeWaterLogEntry(models.Model):
+    flow_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    flow_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Discharge Water Log Entry'
+        verbose_name_plural = 'Discharge Water Log Entries'
+
+    def __str__(self):
+        return f'Discharge Water Log {self.timestamp}'

@@ -39,6 +39,18 @@ class PlcHeatExchangerItem:
 
 
 @dataclass
+class PlcSurgeTankItem:
+    flow_rate: float = 0.0
+    flow_total: float = 0.0
+
+
+@dataclass
+class PlcDischargeWaterItem:
+    flow_rate: float = 0.0
+    flow_total: float = 0.0
+
+
+@dataclass
 class PlcAlarmItem:
     alarm_tag: str = ''
     alarm_description: str = ''
