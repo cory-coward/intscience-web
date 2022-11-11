@@ -58,7 +58,7 @@ class ZoneFlowLogEntry(models.Model):
 
 class GardnerDenverBlowerLogEntry(models.Model):
     intake_pre_air_filter_vacuum = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True,
-                                                       blank=True, verbose_name='Intake Pre Air Filter Vacuum')
+                                                       blank=True, verbose_name='HE Discharge Pressure')
     intake_temp = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True,
                                       verbose_name='Intake Temperature')
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -74,9 +74,10 @@ class GardnerDenverBlowerLogEntry(models.Model):
 class HeatExchangerLogEntry(models.Model):
     flow_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     flow_total = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
-    pressure = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    pressure = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True,
+                                   verbose_name='SSDS Blower Vacuum')
     outlet_air_temp = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True,
-                                          verbose_name='Outlet Air Temperature')
+                                          verbose_name='HE Discharge Temperature')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
